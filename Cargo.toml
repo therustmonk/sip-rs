@@ -1,0 +1,6 @@
+[package]
+name = "sip"
+version = "0.0.1"
+authors = ["Denis Kolodin <deniskolodin@gmail.com>"]
+
+[dependencies]
