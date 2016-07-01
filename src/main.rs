@@ -1,29 +1,34 @@
-use std::net::UdpSocket;
+extern crate httparse;
 
 pub mod header;
 
+use std::net::UdpSocket;
+use header::*;
+
 fn main() {
 
-    for _ in 0..10 {
-        let message = header::SipMessage {
-            start: header::StartLine::RequestLine(header::RequestLine {
-                method: header::Method::Register,
-                uri: header::RequestUri {},
-                version: header::SipVersion::Sip2,
-            }),
-            headers: Vec::new(),
-        };
-
-        println!("SIP message: {}", message);
-    }
-
-
     println!("Connecting to SIP server...");
+
+    let headers: Vec<Box<Header>> = vec![
+        Box::new(MaxForwards { hops: 70 }),
+        Box::new(ContentLength { bytes: 0 }),
+    ];
+
+    let message = Request {
+        method: Method::Register,
+        uri: SipUri::from_host("192.168.1.143"),
+        version: SipVersion::Sip2,
+        headers: headers,
+    };
+
+    let message = message.to_string();
+
     let udp = UdpSocket::bind("0.0.0.0:5061").unwrap();
     udp.connect("192.168.1.143:5060").unwrap();
-    udp.send("REGISTER sip:192.168.1.143 SIP/2.0\n\n".as_bytes());
+    udp.send(message.as_bytes()).unwrap();
+
     let mut buffer = Vec::with_capacity(1000);
-    udp.recv(&mut buffer);
+    udp.recv(&mut buffer).unwrap();
     println!("{:?}", &buffer);
 }
 

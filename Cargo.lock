@@ -1,4 +1,12 @@
 [root]
 name = "sip"
-version = "0.1.0"
+version = "0.0.1"
+dependencies = [
+ "httparse 1.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "httparse"
+version = "1.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
