@@ -1,6 +1,7 @@
 use std::fmt::{self, Display};
 use std::str::FromStr;
-use std::net::SocketAddr;
+
+use uuid::Uuid;
 
 // HEADERS
 
@@ -20,7 +21,6 @@ impl Display for MaxForwards {
     }
 }
 
-// TODO Maybe use uuid@host here...
 pub struct CallId {
     pub id: String,
 }
@@ -31,6 +31,18 @@ impl Header for CallId {
 impl Display for CallId {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Call-ID: {}", self.id)
+    }
+}
+
+impl CallId {
+    pub fn random_with_host(host: &SipHost) -> Self {
+        let uid = Uuid::new_v4();
+        CallId { id: format!("{}@{}", uid, host.address) }
+    }
+
+    pub fn random() -> Self {
+        let uid = Uuid::new_v4();
+        CallId { id: uid.to_string() }
     }
 }
 

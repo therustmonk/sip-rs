@@ -4,7 +4,6 @@ extern crate httparse;
 pub mod header;
 
 use std::net::UdpSocket;
-use uuid::{Uuid, UuidVersion};
 use header::*;
 
 fn main() {
@@ -13,15 +12,14 @@ fn main() {
 
     let address = "192.168.1.143";
 
-    let my_uuid = Uuid::new(UuidVersion::Random).unwrap();
-    let call_id = format!("{}@{}", my_uuid, address);
+    let host = SipHost {
+        address: address.to_string(),
+        port: None,
+    };
 
     let me = SipUri {
         user: Some("100".to_string()),
-        host: SipHost {
-            address: address.to_string(),
-            port: None,
-        },
+        host: host.clone(),
     };
 
     let headers: Vec<Box<Header>> = vec![
@@ -30,7 +28,7 @@ fn main() {
         Box::new(CSeq { number: 12340, method: Method::Register }),
         Box::new(From { uri: me.clone() }),
         Box::new(To { uri: me.clone() }),
-        Box::new(CallId { id: call_id }),
+        Box::new(CallId::random_with_host(&host)),
     ];
 
     let message = Request {
