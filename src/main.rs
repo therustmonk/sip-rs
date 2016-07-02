@@ -9,9 +9,20 @@ fn main() {
 
     println!("Connecting to SIP server...");
 
+    let me = SipUri {
+        user: Some("100".to_string()),
+        host: SipHost {
+            address: "192.168.1.143".to_string(),
+            port: None,
+        },
+    };
+
     let headers: Vec<Box<Header>> = vec![
         Box::new(MaxForwards { hops: 70 }),
         Box::new(ContentLength { bytes: 0 }),
+        Box::new(CSeq { number: 12340, method: Method::Register }),
+        Box::new(From { uri: me.clone() }),
+        Box::new(To { uri: me.clone() }),
     ];
 
     let message = Request {

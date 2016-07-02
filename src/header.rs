@@ -33,6 +33,59 @@ impl Display for ContentLength {
     }
 }
 
+pub struct CSeq {
+    pub number: u32,
+    pub method: Method,
+}
+
+impl Header for CSeq {
+}
+
+impl Display for CSeq {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "CSeq: {} {}", self.number, self.method)
+    }
+}
+
+pub struct UserAgent {
+    pub name: String,
+}
+
+impl Header for UserAgent {
+}
+
+impl Display for UserAgent {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "User-Agent: {}", self.name)
+    }
+}
+
+pub struct From {
+    pub uri: SipUri,
+}
+
+impl Header for From {
+}
+
+impl Display for From {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "From: <{}>", self.uri)
+    }
+}
+
+pub struct To {
+    pub uri: SipUri,
+}
+
+impl Header for To {
+}
+
+impl Display for To {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "To: <{}>", self.uri)
+    }
+}
+
 
 // MESSAGES
 
@@ -91,6 +144,7 @@ impl FromStr for Method {
     }
 }
 
+#[derive(Clone)]
 pub struct SipHost {
     pub address: String,
     pub port: Option<u16>,
@@ -107,6 +161,7 @@ impl Display for SipHost {
     }
 }
 
+#[derive(Clone)]
 pub struct SipUri {
     pub user: Option<String>,
     pub host: SipHost,
