@@ -20,6 +20,20 @@ impl Display for MaxForwards {
     }
 }
 
+// TODO Maybe use uuid@host here...
+pub struct CallId {
+    pub id: String,
+}
+
+impl Header for CallId {
+}
+
+impl Display for CallId {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Call-ID: {}", self.id)
+    }
+}
+
 pub struct ContentLength {
     pub bytes: u16,
 }

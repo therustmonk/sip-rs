@@ -4,5 +4,6 @@ version = "0.0.1"
 authors = ["Denis Kolodin <deniskolodin@gmail.com>"]
 
 [dependencies]
+uuid = { version = "0.2.2", features = ["v4"] }
 httparse = "1.1.2"
 
