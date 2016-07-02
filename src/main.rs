@@ -22,13 +22,27 @@ fn main() {
         host: host.clone(),
     };
 
+    let via_host = SipHost {
+        address: "192.168.1.126".to_string(),
+        port: Some(5060),
+    };
+
     let headers: Vec<Box<Header>> = vec![
-        Box::new(MaxForwards { hops: 70 }),
-        Box::new(ContentLength { bytes: 0 }),
+        Box::new(Via {
+            version: SipVersion::Sip2,
+            transport: "UDP".to_string(),
+            host: via_host,
+            branch: "123kjh123kjh123".to_string(),
+            rport: None,
+        }),
         Box::new(CSeq { number: 12340, method: Method::Register }),
         Box::new(From { uri: me.clone() }),
         Box::new(To { uri: me.clone() }),
         Box::new(CallId::random_with_host(&host)),
+        Box::new(MaxForwards { hops: 70 }),
+        Box::new(ContentLength { bytes: 0 }),
+        Box::new(Contact { }),
+        Box::new(UserAgent { name: "sip-rs library".to_owned() }),
     ];
 
     let message = Request {

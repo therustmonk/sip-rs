@@ -8,6 +8,19 @@ use uuid::Uuid;
 pub trait Header: Display {
 }
 
+pub struct Contact {
+    //pub hops: u16,
+}
+
+impl Header for Contact {
+}
+
+impl Display for Contact {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, "Contact: *")
+    }
+}
+
 pub struct MaxForwards {
     pub hops: u16,
 }
@@ -18,6 +31,28 @@ impl Header for MaxForwards {
 impl Display for MaxForwards {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         write!(f, "Max-Forwards: {}", self.hops)
+    }
+}
+
+pub struct Via {
+    pub version: SipVersion,
+    pub transport: String,
+    pub host: SipHost,
+    pub branch: String,
+    pub rport: Option<u16>,
+}
+
+impl Header for Via {
+}
+
+impl Display for Via {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        try!(write!(f, "Via: {}/{} {}", self.version, self.transport, self.host));
+        try!(write!(f, ";branch={};rport", self.branch));
+        if let Some(ref rport) = self.rport {
+            try!(write!(f, ";rport={}", rport))
+        }
+        Ok(())
     }
 }
 
@@ -95,7 +130,7 @@ impl Header for From {
 
 impl Display for From {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "From: <{}>", self.uri)
+        write!(f, "From: <{}>;tag=12314123", self.uri)
     }
 }
 
