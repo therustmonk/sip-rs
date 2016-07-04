@@ -8,6 +8,27 @@ use uuid::Uuid;
 pub trait Header: Display {
 }
 
+pub struct Authorization {
+    pub username: String,
+    pub realm: String,
+    pub nonce: String,
+    pub uri: SipUri,
+    pub response: String,
+    pub algorithm: String,
+}
+
+impl Header for Authorization {
+}
+
+impl Display for Authorization {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        write!(f, r#"Authorization: Digest username="{}",realm="{}","
+                    "nonce="{}",uri="{}",response="{}",algorithm={}"#,
+               self.username, self.realm, self.nonce, self.uri,
+               self.response, self.algorithm)
+    }
+}
+
 pub struct Contact {
     //pub hops: u16,
 }
