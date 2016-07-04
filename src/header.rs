@@ -38,7 +38,7 @@ pub struct Via {
     pub version: SipVersion,
     pub transport: String,
     pub host: SipHost,
-    pub branch: String,
+    pub branch: Option<String>,
     pub rport: Option<u16>,
 }
 
@@ -48,7 +48,9 @@ impl Header for Via {
 impl Display for Via {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         try!(write!(f, "Via: {}/{} {}", self.version, self.transport, self.host));
-        try!(write!(f, ";branch={};rport", self.branch));
+        if let Some(ref branch) = self.branch {
+            try!(write!(f, ";branch={}", branch));
+        }
         if let Some(ref rport) = self.rport {
             try!(write!(f, ";rport={}", rport))
         }
@@ -130,7 +132,7 @@ impl Header for From {
 
 impl Display for From {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "From: <{}>;tag=12314123", self.uri)
+        write!(f, "From: <{}>", self.uri)
     }
 }
 

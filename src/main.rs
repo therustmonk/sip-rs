@@ -32,7 +32,7 @@ fn main() {
             version: SipVersion::Sip2,
             transport: "UDP".to_string(),
             host: via_host,
-            branch: "123kjh123kjh123".to_string(),
+            branch: None,
             rport: None,
         }),
         Box::new(CSeq { number: 12340, method: Method::Register }),
