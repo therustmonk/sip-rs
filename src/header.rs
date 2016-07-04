@@ -125,6 +125,7 @@ impl Display for UserAgent {
 
 pub struct From {
     pub uri: SipUri,
+    pub tag: Option<String>,
 }
 
 impl Header for From {
@@ -132,7 +133,11 @@ impl Header for From {
 
 impl Display for From {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "From: <{}>", self.uri)
+        try!(write!(f, "From: <{}>", self.uri));
+        if let Some(ref tag) = self.tag {
+            try!(write!(f, ";tag={}", tag));
+        }
+        Ok(())
     }
 }
 
