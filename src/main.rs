@@ -37,7 +37,7 @@ fn main() {
         }),
         Box::new(CSeq { number: 12340, method: Method::Register }),
         Box::new(From { uri: me.clone(), tag: None }),
-        Box::new(To { uri: me.clone() }),
+        Box::new(To { uri: me.clone(), tag: None }),
         Box::new(CallId::random_with_host(&host)),
         Box::new(MaxForwards { hops: 70 }),
         Box::new(ContentLength { bytes: 0 }),

@@ -143,6 +143,7 @@ impl Display for From {
 
 pub struct To {
     pub uri: SipUri,
+    pub tag: Option<String>,
 }
 
 impl Header for To {
@@ -150,7 +151,11 @@ impl Header for To {
 
 impl Display for To {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "To: <{}>", self.uri)
+        try!(write!(f, "To: <{}>", self.uri));
+        if let Some(ref tag) = self.tag {
+            try!(write!(f, ";tag={}", tag));
+        }
+        Ok(())
     }
 }
 
